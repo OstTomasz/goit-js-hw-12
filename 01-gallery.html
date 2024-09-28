@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hw 12</title>
     <script type="module" crossorigin src="/goit-js-hw-12/01-gallery.js"></script>
-    <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/styles-hXN8BbFG.js">
+    <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/styles-N0ZkVh6F.js">
     <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-CRCB-GUD.js">
-    <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/styles-iBNGhgtI.css">
+    <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/styles-CX5sNDmk.css">
     <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/vendor-DumFYO8Z.css">
   </head>
   <body>
@@ -47,11 +47,14 @@
 
         <form id="form">
           <input type="text" id="form-input" placeholder="Search images..." />
-          <button type="submit" id="form-submit">Search</button>
+          <button type="submit" class="button" id="form-submit">Search</button>
         </form>
-        <div id="loader" class="loader visibility"></div>
-        <ul id="gallery"></ul>
 
+        <div>
+          <ul id="gallery"></ul>
+          <button class="visibility button" id="more">Load more</button>
+        </div>
+        <div id="loader" class="loader visibility"></div>
         <a class="back-link" href="./index.html">Go back</a>
 
       </div>
