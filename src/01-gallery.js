@@ -1,6 +1,5 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import simpleLightbox from 'simplelightbox';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
@@ -113,9 +112,6 @@ let lightbox = new SimpleLightbox('#gallery a', {
 form.addEventListener('submit', e => {
   e.preventDefault();
   gallery.innerHTML = '';
-  if (gallery.innerHTML !== '') {
-    simpleLightbox.refresh();
-  }
   searchString = input.value.trim();
   const params = new URLSearchParams({
     key: '35169635-92091552d9eccdba3eb57d7a9',
@@ -123,39 +119,35 @@ form.addEventListener('submit', e => {
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: 'true',
+    per_page: 39,
   });
 
   if (searchString !== '') {
     loader.classList.remove('visibility');
-    fetch(APIURL + '?' + params)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.status, response.statusText);
-        }
-        loader.classList.add('visibility');
-        return response.json();
-      })
-      .then(response => {
-        if (response.hits.length === 0) {
-          iziToast.error({
-            message:
-              'Sorry, there are no images matching your search query. Please try again!',
-          });
-        }
-        const hits = response.hits;
-        input.value = '';
-        return hits;
-      })
-      .then(hits => {
-        renderElements(hits, gallery);
-        lightbox.refresh();
-      })
-      .catch(error => {
+
+    const getPics = async () => {
+      try {
+        return await axios.get(`${APIURL}?${params}`);
+      } catch (error) {
         console.log(error);
         iziToast.error({
-          message: 'Oh no! There is an error!' + error,
+          message: 'Oh no! There is an error: ' + error,
         });
-      });
+      }
+    };
+    getPics().then(response => {
+      loader.classList.add('visibility');
+      const hits = response.data.hits;
+      input.value = '';
+      if (hits.length === 0) {
+        iziToast.error({
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+        });
+      }
+      renderElements(hits, gallery);
+      lightbox.refresh();
+    });
   } else {
     iziToast.info({
       message: 'Type correct search params!',
