@@ -18,7 +18,7 @@
   outline: 4e75ff;
 }
 
-#form-submit {
+.button {
   padding: 8px 16px;
   border-radius: 8px;
   border-style: none;
@@ -33,6 +33,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-bottom: 10px;
   gap: 15px;
 }
 
@@ -77,6 +78,7 @@
   display: none;
 }
 .loader {
+  margin-top: 10px;
   position: relative;
   left: 550px;
   width: 100px;

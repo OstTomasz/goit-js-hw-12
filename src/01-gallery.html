@@ -22,11 +22,14 @@
 
         <form id="form">
           <input type="text" id="form-input" placeholder="Search images..." />
-          <button type="submit" id="form-submit">Search</button>
+          <button type="submit" class="button" id="form-submit">Search</button>
         </form>
-        <div id="loader" class="loader visibility"></div>
-        <ul id="gallery"></ul>
 
+        <div>
+          <ul id="gallery"></ul>
+          <button class="visibility button" id="more">Load more</button>
+        </div>
+        <div id="loader" class="loader visibility"></div>
         <load src="./partials/back-link.html" />
       </div>
     </main>
