@@ -3,6 +3,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 import simpleLightbox from 'simplelightbox';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import axios from 'axios';
 
 const form = document.querySelector('#form');
 const input = document.querySelector('#form-input');
@@ -101,13 +102,21 @@ const renderElements = (images, rootList) => {
   rootList.append(fragment);
 };
 
+let lightbox = new SimpleLightbox('#gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  animationSpeed: 250,
+  fadeSpeed: 250,
+  scrollZoom: false,
+});
+
 form.addEventListener('submit', e => {
   e.preventDefault();
   gallery.innerHTML = '';
   if (gallery.innerHTML !== '') {
     simpleLightbox.refresh();
   }
-  searchString = input.value;
+  searchString = input.value.trim();
   const params = new URLSearchParams({
     key: '35169635-92091552d9eccdba3eb57d7a9',
     q: searchString,
@@ -139,19 +148,17 @@ form.addEventListener('submit', e => {
       })
       .then(hits => {
         renderElements(hits, gallery);
-        const elemLink = document.querySelectorAll('a.lightbox-link');
-        const lightbox = new SimpleLightbox(elemLink, {
-          captionsData: 'alt',
-          captionDelay: 250,
-          animationSpeed: 250,
-          fadeSpeed: 250,
-          scrollZoom: false,
-        });
+        lightbox.refresh();
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        iziToast.error({
+          message: 'Oh no! There is an error!' + error,
+        });
+      });
   } else {
     iziToast.info({
-      message: 'Type search params!',
+      message: 'Type correct search params!',
     });
   }
 });
