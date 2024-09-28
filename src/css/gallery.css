@@ -1,0 +1,106 @@
+#form {
+  margin-block: 2rem;
+}
+
+#form-input {
+  padding: 8px 16px;
+  border: #808080 1px solid;
+  border-radius: 4px;
+}
+#form-input::placeholder {
+  font-size: 16px;
+}
+#form-input:hover {
+  border-color: #000080;
+}
+#form-input:active {
+  border-color: #4e75ff;
+  outline: 4e75ff;
+}
+
+#form-submit {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border-style: none;
+  background-color: #4e75ff;
+  color: white;
+}
+
+#gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 15px;
+}
+
+.lightbox-link {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
+  width: 360px;
+}
+.result {
+  border: solid black;
+}
+.result-pic {
+  margin: 0;
+  height: 200px;
+  object-fit: cover;
+  object-position: top;
+}
+.result-desc {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.desc-el {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 5px auto;
+}
+.desc-header {
+  margin: 0;
+  font-weight: bolder;
+  color: #4e75ff;
+}
+.desc-value {
+  margin: 0;
+  justify-content: center;
+}
+
+.visibility {
+  display: none;
+}
+.loader {
+  position: relative;
+  left: 550px;
+  width: 100px;
+  height: 100px;
+}
+
+.loader:before,
+.loader:after {
+  content: '';
+  border-radius: 50%;
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3) inset;
+}
+.loader:after {
+  box-shadow: 0 2px 0 #ff3d00 inset;
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hw 11</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <load
+      src="./partials/header.html"
+      icon-path="./img/sprite.svg#logo"
+      highlight-act="active"
+    />
+
+    <main>
+      <div class="container">
+        <h1 class="main-title">
+          <span class="main-title-gradient">Welcome</span> to awesome gallery!
+        </h1>
+
+        <form id="form">
+          <input type="text" id="form-input" placeholder="Search images..." />
+          <button type="submit" id="form-submit">Search</button>
+        </form>
+        <div id="loader" class="loader visibility"></div>
+        <ul id="gallery"></ul>
+
+        <load src="./partials/back-link.html" />
+      </div>
+    </main>
+
+    <load src="./partials/footer.html" />
+    <script type="module" src="./01-gallery.js"></script>
+  </body>
+</html>
