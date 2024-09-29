@@ -11,6 +11,8 @@ const gallery = document.querySelector('#gallery');
 const moreBtn = document.querySelector('#more');
 
 let searchString = '';
+let pageIndex = 0;
+const per_page = 15;
 const APIURL = `https://pixabay.com/api/`;
 
 const element = (tag, props) =>
@@ -110,43 +112,47 @@ let lightbox = new SimpleLightbox('#gallery a', {
   scrollZoom: false,
 });
 
+const getPics = async () => {
+  try {
+    pageIndex++;
+    const params = new URLSearchParams({
+      key: '35169635-92091552d9eccdba3eb57d7a9',
+      q: searchString,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: 'true',
+      page: pageIndex,
+      per_page: per_page,
+    });
+    return (await axios.get(`${APIURL}?${params}`)).data.hits;
+  } catch (error) {
+    console.log(error);
+    iziToast.error({
+      message: 'Oh no! There is an error: ' + error,
+    });
+  }
+};
+
 form.addEventListener('submit', e => {
   e.preventDefault();
   gallery.innerHTML = '';
   searchString = input.value.trim();
-  let pageIndex = 0;
+  pageIndex = 0;
 
-  const getPics = async () => {
-    try {
-      pageIndex++;
-      const params = new URLSearchParams({
-        key: '35169635-92091552d9eccdba3eb57d7a9',
-        q: searchString,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: 'true',
-        page: pageIndex,
-        per_page: 39,
-      });
-      const response = (await axios.get(`${APIURL}?${params}`)).data.hits;
-      return response;
-    } catch (error) {
-      console.log(error);
-      iziToast.error({
-        message: 'Oh no! There is an error: ' + error,
-      });
-    }
-  };
   if (searchString !== '') {
     loader.classList.remove('visibility');
-
     getPics().then(hits => {
       loader.classList.add('visibility');
       input.value = '';
-
       renderElements(hits, gallery);
       lightbox.refresh();
-      moreBtn.classList.remove('visibility');
+      if (hits.length >= per_page) {
+        moreBtn.classList.remove('visibility');
+      } else {
+        iziToast.info({
+          message: "We're sorry, but you've reached the end of search results.",
+        });
+      }
       if (hits.length === 0) {
         iziToast.error({
           message:
@@ -155,18 +161,26 @@ form.addEventListener('submit', e => {
         moreBtn.classList.add('visibility');
       }
     });
-    moreBtn.addEventListener('click', e => {
-      loader.classList.remove('visibility');
-      getPics().then(hits => {
-        loader.classList.add('visibility');
-        renderElements(hits, gallery);
-        lightbox.refresh();
-      });
-    });
   } else {
     iziToast.info({
       message: 'Type correct search params!',
     });
     moreBtn.classList.add('visibility');
   }
+});
+
+moreBtn.addEventListener('click', () => {
+  loader.classList.remove('visibility');
+
+  getPics().then(hits => {
+    renderElements(hits, gallery);
+    loader.classList.add('visibility');
+    lightbox.refresh();
+    if (hits.length < per_page) {
+      moreBtn.classList.add('visibility');
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+      });
+    }
+  });
 });
