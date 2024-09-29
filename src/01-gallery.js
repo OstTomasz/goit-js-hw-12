@@ -10,6 +10,7 @@ const loader = document.querySelector('#loader');
 const gallery = document.querySelector('#gallery');
 const moreBtn = document.querySelector('#more');
 
+let scrollBy = 0;
 let searchString = '';
 let pageIndex = 0;
 const per_page = 15;
@@ -135,10 +136,11 @@ const getPics = async () => {
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  gallery.innerHTML = '';
   searchString = input.value.trim();
+  gallery.innerHTML = '';
   pageIndex = 0;
-
+  scrollBy = 0;
+  moreBtn.classList.add('visibility');
   if (searchString !== '') {
     loader.classList.remove('visibility');
     getPics().then(hits => {
@@ -149,38 +151,43 @@ form.addEventListener('submit', e => {
       if (hits.length >= per_page) {
         moreBtn.classList.remove('visibility');
       } else {
-        iziToast.info({
-          message: "We're sorry, but you've reached the end of search results.",
-        });
+        if (gallery.childElementCount > 0)
+          iziToast.info({
+            message:
+              "We're sorry, but you've reached the end of search results.",
+          });
       }
       if (hits.length === 0) {
         iziToast.error({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
         });
-        moreBtn.classList.add('visibility');
       }
+      scrollBy =
+        2 * document.querySelector('.result').getBoundingClientRect().height;
     });
   } else {
     iziToast.info({
       message: 'Type correct search params!',
     });
-    moreBtn.classList.add('visibility');
   }
 });
 
 moreBtn.addEventListener('click', () => {
   loader.classList.remove('visibility');
 
-  getPics().then(hits => {
-    renderElements(hits, gallery);
-    loader.classList.add('visibility');
-    lightbox.refresh();
-    if (hits.length < per_page) {
-      moreBtn.classList.add('visibility');
-      iziToast.info({
-        message: "We're sorry, but you've reached the end of search results.",
-      });
-    }
-  });
+  getPics()
+    .then(hits => {
+      renderElements(hits, gallery);
+      loader.classList.add('visibility');
+      lightbox.refresh();
+      window.scrollBy({ top: scrollBy, behavior: 'smooth' });
+      if (hits.length < per_page) {
+        moreBtn.classList.add('visibility');
+        iziToast.info({
+          message: "We're sorry, but you've reached the end of search results.",
+        });
+      }
+    })
+    .then(window.scrollBy({ top: scrollBy, behavior: 'smooth' }));
 });
