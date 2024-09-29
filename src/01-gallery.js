@@ -13,7 +13,7 @@ const moreBtn = document.querySelector('#more');
 let scrollBy = 0;
 let searchString = '';
 let pageIndex = 0;
-const per_page = 15;
+const perPage = 15;
 const APIURL = `https://pixabay.com/api/`;
 
 const element = (tag, props) =>
@@ -123,7 +123,7 @@ const getPics = async () => {
       orientation: 'horizontal',
       safesearch: 'true',
       page: pageIndex,
-      per_page: per_page,
+      per_page: perPage,
     });
     return (await axios.get(`${APIURL}?${params}`)).data.hits;
   } catch (error) {
@@ -149,7 +149,7 @@ form.addEventListener('submit', e => {
         renderElements(data, gallery);
         loader.classList.add('visibility');
         lightbox.refresh();
-        if (data.length >= per_page) {
+        if (data.length >= perPage) {
           moreBtn.classList.remove('visibility');
         } else {
           if (gallery.childElementCount > 0)
@@ -186,7 +186,7 @@ moreBtn.addEventListener('click', () => {
       loader.classList.add('visibility');
       window.scrollBy({ top: scrollBy, behavior: 'smooth' });
       lightbox.refresh();
-      if (data.length < per_page) {
+      if (data.length < perPage) {
         moreBtn.classList.add('visibility');
         iziToast.info({
           message: "We're sorry, but you've reached the end of search results.",
